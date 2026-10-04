@@ -253,4 +253,3 @@ POSITRON_EOF
       with:
         name: Positron-Sweet2-${{ github.ref_name }}-${{ env.BUILD_TIME }}
         path: Positron-Sweet2-${{ github.ref_name }}-${{ env.BUILD_TIME }}.zip
-
