@@ -1,0 +1,76 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-2.0
+#
+# This scripts adds local version information from the version
+# control systems git, mercurial (hg) and subversion (svn).
+#
+# If something goes wrong, send a mail the kernel build mailinglist
+# (see MAINTAINERS) and CC Nico Schottelius
+# <nico-linuxsetlocalversion -at- schottelius.org>.
+#
+#
+
+usage() {
+	echo "Usage: $0 [--save-scmversion] [srctree]" >&2
+	exit 1
+}
+
+scm_only=false
+srctree=.
+if test "$1" = "--save-scmversion"; then
+	scm_only=true
+	shift
+fi
+if test $# -gt 0; then
+	srctree=$1
+	shift
+fi
+if test $# -gt 0 -o ! -d "$srctree"; then
+	usage
+fi
+
+scm_version()
+{
+	cd "$srctree"
+
+	# Check for git and a git repo.
+	if test -z "$(git rev-parse --show-cdup 2>/dev/null)" &&
+	   head=$(git rev-parse --verify --short=8 HEAD 2>/dev/null); then
+		printf '%s%s' "/" $head
+	fi
+}
+
+collect_files()
+{
+	local file res
+
+	for file; do
+		case "$file" in
+		*\~*)
+			continue
+			;;
+		esac
+		if test -e "$file"; then
+			res="$res$(cat "$file")"
+		fi
+	done
+	echo "$res"
+}
+
+if test -e include/config/auto.conf; then
+	. include/config/auto.conf
+else
+	echo "Error: kernelrelease not valid - run 'make prepare' to update it" >&2
+	exit 1
+fi
+
+# localversion* files in the build and source directory
+res="$(collect_files localversion*)"
+if test ! "$srctree" -ef .; then
+	res="$res$(collect_files "$srctree"/localversion*)"
+fi
+
+# scm version string
+res="$res$(scm_version)"
+
+echo "$res"
