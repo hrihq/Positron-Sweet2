@@ -225,7 +225,7 @@ jobs:
         sed -i 's/kernel.string=.*/kernel.string=Positron Sweet2 by hrihq - RN12Pro4G/' anykernel.sh
 
         # Replace the Glade banner with a Positron ASCII art banner
-        cat > banner <<'POSITRON_EOF'
+        cp "$GITHUB_WORKSPACE/.github/positron-banner.txt" banner'
 ======================================================
 
    ____  _              _        ____
