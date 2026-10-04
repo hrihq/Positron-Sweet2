@@ -419,12 +419,6 @@ cell_t propval_cell(struct property *prop)
 	return fdt32_to_cpu(*((fdt32_t *)prop->val.val));
 }
 
-cell_t propval_cell_n(struct property *prop, int n)
-{
-	assert(prop->val.len / sizeof(cell_t) >= n);
-	return fdt32_to_cpu(*((fdt32_t *)prop->val.val + n));
-}
-
 struct property *get_property_by_label(struct node *tree, const char *label,
 				       struct node **node)
 {
@@ -507,8 +501,7 @@ struct node *get_node_by_path(struct node *tree, const char *path)
 	p = strchr(path, '/');
 
 	for_each_child(tree, child) {
-		if (p && (strlen(child->name) == p-path) &&
-		    strprefixeq(path, p - path, child->name))
+		if (p && strneq(path, child->name, p-path))
 			return get_node_by_path(child, p+1);
 		else if (!p && streq(path, child->name))
 			return child;
@@ -541,10 +534,7 @@ struct node *get_node_by_phandle(struct node *tree, cell_t phandle)
 {
 	struct node *child, *node;
 
-	if ((phandle == 0) || (phandle == -1)) {
-		assert(generate_fixups);
-		return NULL;
-	}
+	assert((phandle != 0) && (phandle != -1));
 
 	if (tree->phandle == phandle) {
 		if (tree->deleted)
