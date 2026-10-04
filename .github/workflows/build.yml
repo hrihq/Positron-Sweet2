@@ -241,7 +241,6 @@ jobs:
 
 ======================================================
 
-POSITRON_EOF
 
         zip -r9 \
           "../Positron-Sweet2-${{ github.ref_name }}-${{ env.BUILD_TIME }}.zip" \
