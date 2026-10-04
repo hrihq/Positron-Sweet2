@@ -220,27 +220,11 @@ jobs:
         cp out/arch/arm64/boot/dtb.img AnyKernel3/dtb.img
 
         cd AnyKernel3
-
         # Positron branding
         sed -i 's/kernel.string=.*/kernel.string=Positron Sweet2 by hrihq - RN12Pro4G/' anykernel.sh
 
-        # Replace the Glade banner with a Positron ASCII art banner
-        cp "$GITHUB_WORKSPACE/.github/positron-banner.txt" banner'
-======================================================
-
-   ____  _              _        ____
-  / __ \| |_ _   _ _ __| |_     / ___| ___  _ __ __ _
- / / _` | __| | | | '__| __|    \___ \/ _ \| '__/ _` |
-| | (_| | |_| |_| | |  | |_     ___) | (_) | | | (_| |
- \ \__,_|\__|\__,_|_|   \__|    |____/ \___/|_|  \__,_|
-
-                    Positron Sweet2
-
-              Redmi Note 12 Pro 4G - sweet2
-                         @hrihq
-
-======================================================
-
+        # Positron branding
+        sed -i 's/kernel.string=.*/kernel.string=Positron Sweet2 by hrihq - RN12Pro4G/' anykernel.sh
 
         zip -r9 \
           "../Positron-Sweet2-${{ github.ref_name }}-${{ env.BUILD_TIME }}.zip" \
