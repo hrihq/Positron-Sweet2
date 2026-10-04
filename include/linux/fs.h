@@ -292,7 +292,7 @@ enum rw_hint {
 
 
 #define IOCB_NOIO		(1 << 20)
-#define IOCB_EVENTFD		(1 << 24)
+#define IOCB_EVENTFD		(1 << 0)
 #define IOCB_APPEND		(1 << 1)
 #define IOCB_DIRECT		(1 << 2)
 #define IOCB_HIPRI		(1 << 3)
